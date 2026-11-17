@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>Converter - Photo & Text to PDF</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/><polyline points='10 9 9 9 8 9'/></svg>">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <circle cx="10" cy="13" r="2"/>
+          <path d="m20 17-1.09-1.09a2 2 0 0 0-2.82 0L10 22"/>
+        </svg>
+      </div>
+      <div>
+        <div style="display: flex; align-items: center;">
+          <h1>Converter</h1>
+          <span class="badge-tag">100% Client-Side • Private</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="mobileConnectBtn" class="btn-secondary" style="font-size:0.8rem; padding:0.35rem 0.65rem;" title="Open on your Phone">
+        📱 Open on Phone
+      </button>
+      <button id="themeToggleBtn" class="icon-btn" title="Toggle Dark/Light Mode">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mode Selector Bar -->
+  <nav class="mode-bar">
+    <button class="mode-btn active" data-mode="document">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      Document (A4)
+    </button>
+    <button class="mode-btn" data-mode="idcard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="16" rx="3"/>
+        <circle cx="9" cy="10" r="2"/>
+        <line x1="15" y1="8" x2="17" y2="8"/>
+        <line x1="15" y1="12" x2="17" y2="12"/>
+        <line x1="7" y1="16" x2="17" y2="16"/>
+      </svg>
+      ID Card (Double Side)
+    </button>
+    <button class="mode-btn" data-mode="letter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      </svg>
+      Letter
+    </button>
+    <button class="mode-btn" data-mode="legal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <line x1="16" y1="21" x2="8" y2="21"/>
+      </svg>
+      Legal Document
+    </button>
+    <button class="mode-btn" data-mode="scanner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      Scanner Mode
+    </button>
+    <button class="mode-btn" data-mode="text">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <line x1="10" y1="9" x2="8" y2="9"/>
+      </svg>
+      Text to PDF
+    </button>
+  </nav>
+
+  <!-- Mobile Segmented View Switcher (Visible on mobile <= 900px) -->
+  <div class="mobile-view-nav" id="mobileViewNav">
+    <button type="button" class="mobile-nav-btn active" id="mobileTabEditorBtn" data-target="editor">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+      <span id="mobileTabEditorLabel">Photos & Edit</span>
+      <span id="mobilePhotoCountBadge" class="mobile-count-pill">0</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" id="mobileTabPreviewBtn" data-target="preview">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      <span>Live PDF Preview</span>
+      <span id="mobilePageCountBadge" class="mobile-count-pill" style="display:none;">1 p</span>
+    </button>
+  </div>
+
+  <!-- Main Application Body -->
+  <main class="app-container">
+
+    <!-- Left Panel: Photos & Arrangement -->
+    <section class="left-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span id="leftPanelTitle">Photos & Arrangement</span>
+          <span id="photoCountBadge" class="photo-count-badge">0 photos</span>
+        </div>
+      </div>
+
+      <!-- Mode Info Banner -->
+      <div id="modeInfoBanner" class="mode-info-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <div id="modeDescription">
+          Standard A4 Document Mode. Converts photos into high-res A4 document pages with adjustable margins and orientation.
+        </div>
+      </div>
+
+      <!-- PHOTOS VIEW (Active in Document, ID Card, Letter, Legal, Scanner modes) -->
+      <div id="photosView" style="display:flex; flex-direction:column; flex:1; gap:1rem; overflow:hidden;">
+        <!-- Dropzone -->
+        <div id="dropzone" class="dropzone">
+          <div class="dropzone-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <p>Drop your photos here, or click to browse</p>
+          <span>Supports JPG, PNG, WEBP, BMP • Paste images with Ctrl+V</span>
+          <div style="display:flex; gap:0.5rem; margin-top:0.5rem;" onclick="event.stopPropagation();">
+            <button type="button" id="browsePhotosBtn" class="btn-secondary" style="font-size:0.8rem; padding:0.35rem 0.75rem;">
+              📁 Browse Files
+            </button>
+            <button type="button" id="dropzoneCameraBtn" class="btn-primary" style="font-size:0.8rem; padding:0.35rem 0.75rem;">
+              📷 Open Camera
+            </button>
+          </div>
+          <input type="file" id="fileInput" multiple accept="image/*" style="display:none;">
+          <input type="file" id="mobileCameraCaptureInput" accept="image/*" capture="environment" style="display:none;">
+        </div>
+
+        <!-- Toolbar -->
+        <div class="photos-toolbar">
+          <div class="toolbar-group">
+            <button id="addMoreBtn" class="btn-secondary" title="Add More Images">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add More
+            </button>
+            <button id="openCameraBtn" class="btn-secondary" title="Capture from Webcam/Camera">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              Camera
+            </button>
+            <button id="autoEnhanceAllBtn" class="btn-secondary" title="Apply Magic Color Filter to all photos">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              </svg>
+              Auto-Enhance All
+            </button>
+          </div>
+          <div class="toolbar-group">
+            <button id="rotateAllBtn" class="btn-secondary" title="Rotate all photos 90° clockwise">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l2.73 2.81"/>
+              </svg>
+              Rotate All
+            </button>
+            <button id="clearAllBtn" class="btn-secondary" title="Clear all photos">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+              Clear All
+            </button>
+          </div>
+        </div>
+
+        <!-- Photos List (Draggable Cards) -->
+        <div id="photosListContainer" class="photos-list-container">
+          <!-- Photo cards rendered dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- TEXT VIEW (Active in Text to PDF mode) -->
+      <div id="textView" class="text-view-container" style="display:none;">
+        <input type="text" id="textDocTitle" class="text-doc-title" placeholder="Document Title (e.g. Project Proposal, Notes, Letter)">
+
+        <!-- Text Formatting Toolbar -->
+        <div class="text-format-toolbar">
+          <div class="text-format-group">
+            <select id="textFontFamilySelect" class="form-select" style="width: auto; font-size:0.8rem; padding:0.25rem 0.5rem;">
+              <option value="sans-serif" selected>Sans-Serif (Modern)</option>
+              <option value="serif">Serif (Times / Formal)</option>
+              <option value="monospace">Monospace (Code / Notes)</option>
+            </select>
+            <select id="textFontSizeSelect" class="form-select" style="width: auto; font-size:0.8rem; padding:0.25rem 0.5rem;">
+              <option value="10">10 pt</option>
+              <option value="11">11 pt</option>
+              <option value="12" selected>12 pt</option>
+              <option value="14">14 pt</option>
+              <option value="16">16 pt</option>
+              <option value="18">18 pt</option>
+              <option value="22">22 pt</option>
+            </select>
+          </div>
+
+          <div class="text-format-group">
+            <button type="button" id="textBoldBtn" class="format-btn" title="Bold">B</button>
+            <button type="button" id="textItalicBtn" class="format-btn" title="Italic" style="font-style: italic;">I</button>
+          </div>
+
+          <div class="text-format-group">
+            <button type="button" class="format-btn active" data-align="left" title="Align Left">L</button>
+            <button type="button" class="format-btn" data-align="center" title="Align Center">C</button>
+            <button type="button" class="format-btn" data-align="right" title="Align Right">R</button>
+          </div>
+
+          <div class="text-format-group">
+            <select id="textLineSpacingSelect" class="form-select" style="width: auto; font-size:0.8rem; padding:0.25rem 0.5rem;">
+              <option value="1.2">1.2x (Tight)</option>
+              <option value="1.5" selected>1.5x (Normal)</option>
+              <option value="1.8">1.8x (Relaxed)</option>
+              <option value="2.0">2.0x (Double)</option>
+            </select>
+          </div>
+
+          <div class="text-format-group">
+            <button type="button" id="importTextFileBtn" class="btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.6rem;" title="Load .txt or .md file">
+              📁 Import
+            </button>
+            <input type="file" id="textFileImportInput" accept=".txt,.md,.json,.csv,.log,.js,.py,.html" style="display:none;">
+            <button type="button" id="insertSampleTextBtn" class="btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.6rem;" title="Insert Sample Template">
+              📄 Sample
+            </button>
+            <button type="button" id="clearTextBtn" class="btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.6rem;" title="Clear Editor">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Textarea -->
+        <textarea id="textContentArea" class="text-content-area" placeholder="Type or paste your text here...
+
+It automatically word-wraps, paginates, and renders as high-quality PDF pages in real-time on the right preview pane!"></textarea>
+
+        <!-- Stats Bar -->
+        <div class="text-stats-bar">
+          <span id="textStatsWords">0 words • 0 characters</span>
+          <span id="textStatsPages">Estimated Pages: 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Live PDF Preview & Export Settings -->
+    <section class="right-panel">
+      <!-- Preview Header Navigation -->
+      <div class="preview-header">
+        <div class="panel-title">
+          <span>Live PDF Preview</span>
+        </div>
+        <div class="preview-nav">
+          <button id="prevPageBtn" class="icon-btn" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <span id="pageIndicator" class="page-indicator">Page 1 of 1</span>
+          <button id="nextPageBtn" class="icon-btn" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Canvas Preview Viewport -->
+      <div class="preview-viewport">
+        <div class="preview-canvas-wrapper">
+          <canvas id="pdfPreviewCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Settings & Download Controls -->
+      <div class="export-panel">
+        <div class="settings-grid">
+          <!-- Standard Mode Settings -->
+          <div class="setting-item">
+            <label for="orientationSelect">Orientation</label>
+            <select id="orientationSelect" class="form-select">
+              <option value="auto">Auto (Match Image)</option>
+              <option value="portrait">Portrait</option>
+              <option value="landscape">Landscape</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <label for="marginSelect">Margin</label>
+            <select id="marginSelect" class="form-select">
+              <option value="0">None (0 mm)</option>
+              <option value="5">Small (5 mm)</option>
+              <option value="10" selected>Normal (10 mm)</option>
+              <option value="20">Wide (20 mm)</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <label for="perPageSelect">Photos per Page</label>
+            <select id="perPageSelect" class="form-select">
+              <option value="1" selected>1 photo</option>
+              <option value="2">2 photos (split)</option>
+              <option value="4">4 photos (grid)</option>
+            </select>
+          </div>
+
+          <!-- ID Card Specific Settings (Hidden by default, shown in ID Card mode) -->
+          <div id="idCardSettingsGroup" style="display:none; grid-column: span 3; gap: 0.75rem;">
+            <div class="setting-item">
+              <label for="idCardLayoutSelect">Card Layout</label>
+              <select id="idCardLayoutSelect" class="form-select">
+                <option value="vertical" selected>Vertical Stack (Top / Bottom)</option>
+                <option value="horizontal">Horizontal (Side by Side)</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label for="idCardSizeSelect">Card Scale</label>
+              <select id="idCardSizeSelect" class="form-select">
+                <option value="standard" selected>Actual Size (85.6 × 54 mm)</option>
+                <option value="enlarged">Enlarged (110 × 70 mm)</option>
+              </select>
+            </div>
+            <div class="setting-item" style="justify-content: center;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-top: 1.2rem;">
+                <input type="checkbox" id="idCardCutLinesCheck" checked>
+                <span>Draw Cut-Out Guides</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Text Mode Specific Settings (Shown only in Text Mode) -->
+          <div id="textSettingsGroup" style="display:none; grid-column: span 3; gap: 0.75rem;">
+            <div class="setting-item">
+              <label for="textPageFormatSelect">Page Size</label>
+              <select id="textPageFormatSelect" class="form-select">
+                <option value="a4" selected>A4 Document</option>
+                <option value="letter">US Letter</option>
+                <option value="legal">US Legal</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label for="textMarginSelect">Page Margins</label>
+              <select id="textMarginSelect" class="form-select">
+                <option value="10">Small (10 mm)</option>
+                <option value="20" selected>Standard (20 mm)</option>
+                <option value="30">Wide (30 mm)</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <label for="textColorSelect">Text Color</label>
+              <select id="textColorSelect" class="form-select">
+                <option value="#0f172a" selected>Dark Slate</option>
+                <option value="#000000">Pure Black</option>
+                <option value="#1e3a8a">Navy Blue</option>
+                <option value="#334155">Muted Slate</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- General PDF Export Options -->
+          <div class="setting-item">
+            <label for="qualitySelect">Image Quality</label>
+            <select id="qualitySelect" class="form-select">
+              <option value="0.95">High (Minimal compression)</option>
+              <option value="0.80" selected>Balanced (Standard)</option>
+              <option value="0.55">Compact (Small file size)</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <label for="pageNumbersSelect">Page Numbers</label>
+            <select id="pageNumbersSelect" class="form-select">
+              <option value="none" selected>None</option>
+              <option value="bottom-center">Bottom Center</option>
+              <option value="bottom-right">Bottom Right</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <label for="pdfFileNameInput">PDF File Name</label>
+            <input type="text" id="pdfFileNameInput" class="form-input" value="document_scan.pdf">
+          </div>
+        </div>
+
+        <!-- Download Button -->
+        <button id="exportPdfBtn" class="btn-primary" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export & Download PDF
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Scanner, Crop & Adjust Studio Modal -->
+  <div id="scannerModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Crop, Adjust & Scanner Studio
+        </div>
+        <button id="closeScannerBtn" class="icon-btn" title="Close Modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Canvas Viewport -->
+        <div class="scanner-viewport">
+          <canvas id="scannerCanvas"></canvas>
+        </div>
+
+        <!-- Studio Navigation Tabs -->
+        <div class="modal-tabs">
+          <button type="button" class="modal-tab-btn active" data-tab="tab-crop">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>
+            </svg>
+            Crop & Straighten
+          </button>
+          <button type="button" class="modal-tab-btn" data-tab="tab-filters">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/>
+            </svg>
+            Scanner Presets
+          </button>
+          <button type="button" class="modal-tab-btn" data-tab="tab-adjust">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
+              <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+            </svg>
+            Color & Details
+          </button>
+        </div>
+
+        <!-- TAB 1: CROP & STRAIGHTEN -->
+        <div id="tab-crop" class="tab-pane active">
+          <!-- Crop Mode Switcher (DocScanner vs Standard Rectangle) -->
+          <div class="crop-mode-switcher">
+            <button type="button" id="cropModePerspectiveBtn" class="crop-mode-btn active" title="CamScanner / DocScanner 4-corner perspective warp & deskew">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="4 4 20 2 18 20 2 18"/>
+                <circle cx="4" cy="4" r="2" fill="currentColor"/>
+                <circle cx="20" cy="2" r="2" fill="currentColor"/>
+                <circle cx="18" cy="20" r="2" fill="currentColor"/>
+                <circle cx="2" cy="18" r="2" fill="currentColor"/>
+              </svg>
+              <span>📐 DocScanner (4-Corner Warp)</span>
+              <span class="crop-badge">DocScanner</span>
+            </button>
+            <button type="button" id="cropModeRectBtn" class="crop-mode-btn" title="Traditional 8-handle rectangular crop">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="9" y1="3" x2="9" y2="21" stroke-dasharray="2 2"/>
+                <line x1="15" y1="15" x2="15" y2="21" stroke-dasharray="2 2"/>
+              </svg>
+              <span>🔲 Standard Rectangle Crop</span>
+            </button>
+          </div>
+
+          <!-- DocScanner 4-Corner Perspective Controls -->
+          <div id="perspectiveCropControls" class="crop-subpanel active">
+            <div class="crop-info-banner">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <div>
+                <strong>DocScanner 4-Corner Warp:</strong> Drag the 4 corner handles or edge bars to wrap around your document. A <strong>2.5x Magnifier Loupe</strong> with targeting crosshairs auto-appears for millimeter precision!
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.6rem;">
+              <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                <button type="button" id="autoFitCornersBtn" class="btn-secondary" title="Reset corners to fit photo boundaries">
+                  ✨ Reset Corners
+                </button>
+                <button type="button" id="tightFitCornersBtn" class="btn-secondary" title="Inset corners 10% for quick document fit">
+                  🔍 Inset 10%
+                </button>
+              </div>
+              <button type="button" id="applyPerspectiveCropBtn" class="btn-primary" style="padding:0.55rem 1.1rem; font-weight:700;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Apply DocScanner Deskew
+              </button>
+            </div>
+          </div>
+
+          <!-- Standard Rectangle Crop Controls -->
+          <div id="rectangleCropControls" class="crop-subpanel" style="display:none;">
+            <!-- Aspect Ratios -->
+            <div style="display:flex; flex-direction:column; gap:0.35rem;">
+              <label style="font-size:0.75rem; font-weight:600; color:var(--text-secondary);">ASPECT RATIO LOCK</label>
+              <div class="pill-group">
+                <button type="button" class="pill-btn active" data-aspect="free">Freeform</button>
+                <button type="button" class="pill-btn" data-aspect="1:1">1:1 Square</button>
+                <button type="button" class="pill-btn" data-aspect="4:3">4:3 Standard</button>
+                <button type="button" class="pill-btn" data-aspect="16:9">16:9 Widescreen</button>
+                <button type="button" class="pill-btn" data-aspect="a4">A4 Document</button>
+                <button type="button" class="pill-btn" data-aspect="letter">US Letter</button>
+                <button type="button" class="pill-btn" data-aspect="legal">US Legal</button>
+                <button type="button" class="pill-btn" data-aspect="id">ID Card (85.6:54)</button>
+              </div>
+            </div>
+
+            <!-- Straighten Slider -->
+            <div class="slider-control">
+              <label>
+                <span>Straighten / Fine Angle</span>
+                <span id="fineAngleVal">0°</span>
+              </label>
+              <input type="range" id="fineAngleSlider" min="-45" max="45" value="0" step="0.5">
+            </div>
+
+            <div style="display:flex; justify-content:flex-end;">
+              <button type="button" id="applyRectangleCropBtn" class="btn-primary" style="padding:0.5rem 1rem;">
+                Apply Crop
+              </button>
+            </div>
+          </div>
+
+          <!-- Geometry Actions Bar (Shared) -->
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; padding-top:0.4rem; border-top:1px solid var(--border-color);">
+            <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+              <button type="button" id="rotateLeftModalBtn" class="btn-secondary" title="Rotate 90° CCW">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38l-2.73 2.81"/>
+                </svg>
+                90° Left
+              </button>
+              <button type="button" id="rotateRightModalBtn" class="btn-secondary" title="Rotate 90° CW">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l2.73 2.81"/>
+                </svg>
+                90° Right
+              </button>
+              <button type="button" id="flipHModalBtn" class="btn-secondary" title="Flip Horizontal">Flip H</button>
+              <button type="button" id="flipVModalBtn" class="btn-secondary" title="Flip Vertical">Flip V</button>
+            </div>
+
+            <div style="display:flex; gap:0.4rem; align-items:center;">
+              <button type="button" id="cropToggleBtn" class="btn-secondary" title="Show/Hide Crop Handles">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>
+                </svg>
+                Crop Handles: ON
+              </button>
+              <button type="button" id="resetCropBtn" class="btn-secondary" title="Reset image crop and orientation to original">
+                ↺ Revert to Original
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: SCANNER PRESETS -->
+        <div id="tab-filters" class="tab-pane">
+          <div style="display:flex; flex-direction:column; gap:0.4rem;">
+            <label style="font-size:0.75rem; font-weight:600; color:var(--text-secondary);">CHOOSE DOCUMENT FILTER</label>
+            <div class="filters-strip">
+              <button class="filter-preset-btn active" data-filter="original">
+                <span>Original</span>
+              </button>
+              <button class="filter-preset-btn" data-filter="magic">
+                <span>Magic Color</span>
+              </button>
+              <button class="filter-preset-btn" data-filter="bw">
+                <span>Document B&W</span>
+              </button>
+              <button class="filter-preset-btn" data-filter="gray">
+                <span>Grayscale</span>
+              </button>
+              <button class="filter-preset-btn" data-filter="contrast">
+                <span>High Contrast</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="slider-control" id="thresholdGroup">
+            <label>
+              <span>B&W Document Threshold</span>
+              <span id="thresholdVal">128</span>
+            </label>
+            <input type="range" id="thresholdSlider" min="0" max="255" value="128">
+            <span style="font-size:0.72rem; color:var(--text-muted);">Adjust to clean up shadowy background paper without losing text</span>
+          </div>
+        </div>
+
+        <!-- TAB 3: FINE ADJUSTMENTS -->
+        <div id="tab-adjust" class="tab-pane">
+          <div class="slider-group">
+            <div class="slider-control">
+              <label>
+                <span>Brightness</span>
+                <span id="brightnessVal">0</span>
+              </label>
+              <input type="range" id="brightnessSlider" min="-100" max="100" value="0">
+            </div>
+            <div class="slider-control">
+              <label>
+                <span>Contrast</span>
+                <span id="contrastVal">0</span>
+              </label>
+              <input type="range" id="contrastSlider" min="-100" max="100" value="0">
+            </div>
+            <div class="slider-control">
+              <label>
+                <span>Color Saturation</span>
+                <span id="saturationVal">0</span>
+              </label>
+              <input type="range" id="saturationSlider" min="-100" max="100" value="0">
+            </div>
+            <div class="slider-control">
+              <label>
+                <span>Sharpness & Clarity</span>
+                <span id="sharpnessVal">0</span>
+              </label>
+              <input type="range" id="sharpnessSlider" min="0" max="100" value="0">
+            </div>
+            <div class="slider-control">
+              <label>
+                <span>Color Warmth / Temp</span>
+                <span id="warmthVal">0</span>
+              </label>
+              <input type="range" id="warmthSlider" min="-50" max="50" value="0">
+            </div>
+          </div>
+          <div style="display:flex; justify-content:flex-end;">
+            <button id="resetAdjustmentsBtn" class="btn-secondary" style="font-size:0.8rem; padding:0.35rem 0.75rem;">
+              Reset Adjustments
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button id="applyAllScannerBtn" class="btn-secondary" title="Apply these adjustments to all uploaded photos">
+          Apply to All Photos
+        </button>
+        <div style="display:flex; gap:0.5rem;">
+          <button id="closeScannerFooterBtn" class="btn-secondary">
+            Cancel
+          </button>
+          <button id="saveScannerBtn" class="btn-primary">
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Camera Document Scanner Modal -->
+  <div id="cameraModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 720px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          Camera Document Scanner
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <select id="cameraDeviceSelect" class="form-select" style="max-width: 170px; font-size:0.8rem; padding:0.3rem 0.5rem;"></select>
+          <button id="closeCameraBtn" class="icon-btn" title="Close Camera">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Camera Video & Guide Container -->
+        <div class="camera-viewport">
+          <video id="cameraVideo" autoplay playsinline></video>
+          <canvas id="cameraReviewCanvas"></canvas>
+          <div class="camera-flash-overlay" id="cameraFlash"></div>
+          <div class="camera-guide" id="cameraGuide">
+            <div class="guide-box document" id="guideBox"></div>
+          </div>
+        </div>
+
+        <!-- Framing Guide Selector -->
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+          <div style="display:flex; align-items:center; gap:0.4rem;">
+            <span style="font-size:0.75rem; font-weight:600; color:var(--text-secondary);">GUIDE:</span>
+            <div class="pill-group">
+              <button type="button" class="pill-btn" data-guide="none">No Guide</button>
+              <button type="button" class="pill-btn active" data-guide="document">📄 Document (A4)</button>
+              <button type="button" class="pill-btn" data-guide="idcard">🪪 ID Card Box</button>
+            </div>
+          </div>
+          <span style="font-size:0.72rem; color:var(--text-muted);">Press Spacebar to capture</span>
+        </div>
+
+        <!-- Live Streaming Capture Controls -->
+        <div id="cameraLiveControls" class="camera-controls-bar">
+          <button id="switchCameraBtn" class="btn-secondary" title="Switch Front/Rear Camera">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l2.73 2.81"/>
+            </svg>
+            Flip Camera
+          </button>
+
+          <div class="shutter-wrapper">
+            <button id="shutterBtn" class="shutter-btn" title="Snap Photo (or press Spacebar)">
+              <div class="shutter-inner-circle"></div>
+            </button>
+          </div>
+
+          <div style="width: 100px;"></div> <!-- balance layout -->
+        </div>
+
+        <!-- Captured Review Controls (Hidden until photo taken) -->
+        <div id="cameraReviewControls" class="camera-controls-bar" style="display:none; justify-content:flex-end;">
+          <button id="retakeBtn" class="btn-secondary">
+            🔄 Retake
+          </button>
+          <button id="addAndSnapAnotherBtn" class="btn-secondary">
+            ➕ Add & Snap Another
+          </button>
+          <button id="confirmAddPhotoBtn" class="btn-primary">
+            ✅ Add to Document
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Connect Modal -->
+  <div id="mobileConnectModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 460px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>📱 Open on Phone</span>
+        </div>
+        <button id="closeMobileConnectBtn" class="icon-btn" title="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="align-items: center; text-align: center; gap: 1rem;">
+        <p style="font-size:0.9rem; color:var(--text-secondary);">
+          Connect your phone to the <strong>same Wi-Fi network</strong>, then scan this QR code or type the link below:
+        </p>
+
+        <div style="background:#ffffff; padding:10px; border-radius:12px; display:inline-block; box-shadow:var(--shadow-md);">
+          <img id="mobileQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=http://192.168.29.135:3000/" alt="QR Code" style="width:180px; height:180px; display:block;">
+        </div>
+
+        <div style="width:100%; display:flex; flex-direction:column; gap:0.4rem;">
+          <span style="font-size:0.75rem; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Direct Link:</span>
+          <div style="background:var(--bg-input); border:1px solid var(--border-color); padding:0.6rem 0.85rem; border-radius:var(--radius-sm); font-family:monospace; font-size:1rem; font-weight:700; color:var(--accent-primary); user-select:all;" id="mobileUrlDisplay">
+            http://192.168.29.135:3000/
+          </div>
+        </div>
+
+        <div style="font-size:0.8rem; color:var(--text-muted); text-align:left; background:var(--bg-card); padding:0.75rem; border-radius:var(--radius-md); border:1px solid var(--border-color); width:100%;">
+          <strong>Tips:</strong>
+          <ul style="margin-left:1.2rem; margin-top:0.35rem; display:flex; flex-direction:column; gap:0.25rem;">
+            <li>Works in Chrome, Samsung Internet, Firefox, etc.</li>
+            <li>Allows taking photos directly with your phone camera!</li>
+            <li>If it doesn't load, ensure Windows Firewall isn't blocking incoming connections.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: flex-end;">
+        <button id="closeMobileConnectFooterBtn" class="btn-primary">
+          Got it
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Action Floating Bar (Visible on mobile <= 900px) -->
+  <div class="mobile-bottom-bar" id="mobileBottomBar">
+    <button type="button" id="mobileCameraFabBtn" class="mobile-fab-btn" title="Open Camera Scanner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      <span>Scan</span>
+    </button>
+    <button type="button" id="mobileGalleryFabBtn" class="mobile-fab-btn secondary" title="Add Photos from Gallery">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      <span>Add</span>
+    </button>
+    <button type="button" id="mobilePreviewToggleFabBtn" class="mobile-fab-btn primary" title="Switch to PDF Preview & Download">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      <span id="mobileExportLabel">Export PDF</span>
+    </button>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Client-side PDF Library (CDN with graceful local Native fallback) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Application Modules -->
+  <script src="js/scanner.js"></script>
+  <script src="js/pdf-generator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
