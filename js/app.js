@@ -229,20 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast(`Switched to ${state.theme} theme`, 'info');
   });
 
-  const mobileConnectBtn = document.getElementById('mobileConnectBtn');
-  const mobileConnectModal = document.getElementById('mobileConnectModal');
-  const closeMobileConnectBtn = document.getElementById('closeMobileConnectBtn');
-  const closeMobileConnectFooterBtn = document.getElementById('closeMobileConnectFooterBtn');
-
-  if (mobileConnectBtn && mobileConnectModal) {
-    mobileConnectBtn.addEventListener('click', () => {
-      mobileConnectModal.classList.add('active');
-    });
-    const hideMobileModal = () => mobileConnectModal.classList.remove('active');
-    if (closeMobileConnectBtn) closeMobileConnectBtn.addEventListener('click', hideMobileModal);
-    if (closeMobileConnectFooterBtn) closeMobileConnectFooterBtn.addEventListener('click', hideMobileModal);
-  }
-
   /* ==========================================================================
      Mode Switching
      ========================================================================== */

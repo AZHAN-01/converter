@@ -1013,10 +1013,6 @@ body {
     display: none; /* Keep header clean on small phone screens */
   }
 
-  #mobileConnectBtn {
-    display: none !important; /* Hide QR button when already viewing on a phone */
-  }
-
   /* Mode Bar: Smooth touch horizontal scrollbar */
   .mode-bar {
     padding: 0.5rem 1rem;
