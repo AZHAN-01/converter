@@ -300,8 +300,16 @@ It automatically word-wraps, paginates, and renders as high-quality PDF pages in
     <section class="right-panel">
       <!-- Preview Header Navigation -->
       <div class="preview-header">
-        <div class="panel-title">
+        <div class="panel-title" style="display:flex; align-items:center; gap:0.45rem;">
           <span>Live PDF Preview</span>
+          <button type="button" id="togglePreviewSizeBtn" class="icon-btn" style="width:24px; height:24px; padding:2px;" title="Toggle Compact / Expanded View">
+            <svg id="previewExpandIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 3 21 3 21 9"/>
+              <polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/>
+              <line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
         </div>
         <div class="preview-nav">
           <button id="prevPageBtn" class="icon-btn" title="Previous Page">
